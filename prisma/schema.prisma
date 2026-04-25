@@ -1,0 +1,62 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model Company {
+  id              String        @id @default(cuid())
+  name            String        @unique
+  lane            String        // "neurotech" | "biotech" | "defense" | "ai_ml" | "academic_lab"
+  priority        Int           // 1 (top) – 5 (stretch)
+  careerPageUrl   String
+  cycleOpensMonth Int?          // 1-12, null if rolling
+  cycleClosesMonth Int?         // 1-12, null if rolling
+  rolesHiredBs    String        // comma-separated, e.g. "research intern,ML intern"
+  notes           String?       // free text
+  warmIntros      String?       // free text — names + how I know them
+  prepChecklistJson String?     // JSON string of {item: string, done: boolean}[]
+  whyMe           String?       // saved "why me" paragraph
+  applications    Application[]
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+}
+
+model Application {
+  id              String    @id @default(cuid())
+  companyId       String
+  company         Company   @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  roleTitle       String
+  roleUrl         String?
+  jdText          String?   // pasted job description for fit analysis
+  status          String    // "target" | "applied" | "screen" | "interview" | "offer" | "rejected" | "ghosted"
+  appliedAt       DateTime?
+  lastActivityAt  DateTime  @default(now())
+  followUpDueAt   DateTime?
+  postMortem      String?   // filled after rejection/ghosting
+  fitAnalysisJson String?   // JSON of last AnalyzeFitResult
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+}
+
+model Project {
+  id          String   @id @default(cuid())
+  name        String
+  status      String   // "idea" | "in_progress" | "shipped"
+  description String
+  githubUrl   String?
+  relevantTo  String?  // comma-separated company ids or lane names
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Profile {
+  id            String   @id @default("singleton")
+  resumeText    String   // master resume in plain text
+  skillsJson    String   // JSON of {skill: string, level: 1-5}[]
+  educationText String
+  updatedAt     DateTime @updatedAt
+}
