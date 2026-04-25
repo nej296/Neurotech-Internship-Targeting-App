@@ -1,0 +1,167 @@
+[
+  {
+    "name": "Neuralink",
+    "lane": "neurotech",
+    "priority": 1,
+    "careerPageUrl": "https://neuralink.com/careers/",
+    "cycleOpensMonth": 9,
+    "cycleClosesMonth": 12,
+    "rolesHiredBs": "research intern,ML intern,brain interfaces intern",
+    "notes": "Highly competitive. Lead with PyTorch + signal processing.",
+    "warmIntros": ""
+  },
+  {
+    "name": "Synchron",
+    "lane": "neurotech",
+    "priority": 1,
+    "careerPageUrl": "https://synchron.com/careers",
+    "cycleOpensMonth": 8,
+    "cycleClosesMonth": 11,
+    "rolesHiredBs": "research intern,neuroengineering intern",
+    "notes": "Endovascular BCI — less invasive than Neuralink. Highlight any biomedical signal processing work.",
+    "warmIntros": ""
+  },
+  {
+    "name": "Paradromics",
+    "lane": "neurotech",
+    "priority": 1,
+    "careerPageUrl": "https://paradromics.com/careers",
+    "cycleOpensMonth": 9,
+    "cycleClosesMonth": 12,
+    "rolesHiredBs": "research intern,data science intern",
+    "notes": "High-bandwidth BCI. Strong focus on neural data processing pipelines.",
+    "warmIntros": ""
+  },
+  {
+    "name": "Blackrock Neurotech",
+    "lane": "neurotech",
+    "priority": 2,
+    "careerPageUrl": "https://blackrockneurotech.com/careers/",
+    "cycleOpensMonth": 8,
+    "cycleClosesMonth": 11,
+    "rolesHiredBs": "research intern,software engineering intern,neural signal processing intern",
+    "notes": "Industry standard Utah array. Long history in BCI research. Emphasize electrophysiology and real-time signal processing.",
+    "warmIntros": ""
+  },
+  {
+    "name": "Precision Neuroscience",
+    "lane": "neurotech",
+    "priority": 2,
+    "careerPageUrl": "https://precisionneuro.io/careers",
+    "cycleOpensMonth": 9,
+    "cycleClosesMonth": 12,
+    "rolesHiredBs": "research intern,computational neuroscience intern",
+    "notes": "Layer 7 cortical electrode array. Founded by Neuralink co-founder. Focus on high-density surface recordings.",
+    "warmIntros": ""
+  },
+  {
+    "name": "Motif Neurotech",
+    "lane": "neurotech",
+    "priority": 3,
+    "careerPageUrl": "https://motifneurotech.com/careers",
+    "cycleOpensMonth": null,
+    "cycleClosesMonth": null,
+    "rolesHiredBs": "research intern,engineering intern",
+    "notes": "Minimally invasive neuromodulation. Smaller team, may have rolling openings.",
+    "warmIntros": ""
+  },
+  {
+    "name": "Inbrain Neuroelectronics",
+    "lane": "neurotech",
+    "priority": 3,
+    "careerPageUrl": "https://inbrain-neuroelectronics.com/careers/",
+    "cycleOpensMonth": null,
+    "cycleClosesMonth": null,
+    "rolesHiredBs": "research intern,data analysis intern",
+    "notes": "Graphene-based neural interfaces. Barcelona HQ, some US positions. Highlight materials science or bioelectronics interest.",
+    "warmIntros": ""
+  },
+  {
+    "name": "Kernel",
+    "lane": "neurotech",
+    "priority": 3,
+    "careerPageUrl": "https://kernel.com/careers",
+    "cycleOpensMonth": null,
+    "cycleClosesMonth": null,
+    "rolesHiredBs": "research intern,neuroscience intern,ML intern",
+    "notes": "Non-invasive neuroimaging (Flow headset). Emphasis on fNIRS and time-domain optical data.",
+    "warmIntros": ""
+  },
+  {
+    "name": "Meta Reality Labs",
+    "lane": "ai_ml",
+    "priority": 2,
+    "careerPageUrl": "https://www.metacareers.com/areas-of-work/reality-labs/",
+    "cycleOpensMonth": 9,
+    "cycleClosesMonth": 11,
+    "rolesHiredBs": "research scientist intern,ML intern,brain-computer interface intern",
+    "notes": "Neural interfaces team within Reality Labs. Large-scale recruitment. Highlight any AR/VR or EMG/EEG decoding work.",
+    "warmIntros": ""
+  },
+  {
+    "name": "Recursion Pharmaceuticals",
+    "lane": "biotech",
+    "priority": 2,
+    "careerPageUrl": "https://www.recursion.com/careers",
+    "cycleOpensMonth": 10,
+    "cycleClosesMonth": 1,
+    "rolesHiredBs": "data science intern,ML intern,computational biology intern",
+    "notes": "AI-driven drug discovery. Heavy use of computer vision on cell imaging. Emphasize ML + biology intersection.",
+    "warmIntros": ""
+  },
+  {
+    "name": "Insitro",
+    "lane": "biotech",
+    "priority": 2,
+    "careerPageUrl": "https://insitro.com/careers",
+    "cycleOpensMonth": 10,
+    "cycleClosesMonth": 1,
+    "rolesHiredBs": "ML intern,computational biology intern,data engineering intern",
+    "notes": "ML for drug discovery. Founded by Daphne Koller. Strong ML culture. Highlight statistical modeling and large-scale data experience.",
+    "warmIntros": ""
+  },
+  {
+    "name": "Genentech",
+    "lane": "biotech",
+    "priority": 3,
+    "careerPageUrl": "https://www.gene.com/careers",
+    "cycleOpensMonth": 9,
+    "cycleClosesMonth": 12,
+    "rolesHiredBs": "bioinformatics intern,computational biology intern,data science intern",
+    "notes": "Large biotech with strong computational research arm. Formal internship program with structured mentorship.",
+    "warmIntros": ""
+  },
+  {
+    "name": "Allen Institute for Brain Science",
+    "lane": "academic_lab",
+    "priority": 2,
+    "careerPageUrl": "https://alleninstitute.org/careers/",
+    "cycleOpensMonth": 11,
+    "cycleClosesMonth": 2,
+    "rolesHiredBs": "summer research intern,computational neuroscience intern,data engineering intern",
+    "notes": "Open-science focus. Massive public datasets (Allen Brain Atlas). Strong fit for computational neuro background. Highlight data analysis and visualization skills.",
+    "warmIntros": ""
+  },
+  {
+    "name": "Janelia Research Campus / HHMI",
+    "lane": "academic_lab",
+    "priority": 2,
+    "careerPageUrl": "https://www.janelia.org/you-janelia/students-postdocs",
+    "cycleOpensMonth": 10,
+    "cycleClosesMonth": 1,
+    "rolesHiredBs": "summer research intern,undergraduate scholar",
+    "notes": "Elite neuroscience research campus. Competitive undergrad program. Emphasize specific research interest alignment with a lab.",
+    "warmIntros": ""
+  },
+  {
+    "name": "JHU Applied Physics Lab",
+    "lane": "defense",
+    "priority": 2,
+    "careerPageUrl": "https://www.jhuapl.edu/careers",
+    "cycleOpensMonth": 9,
+    "cycleClosesMonth": 12,
+    "rolesHiredBs": "research intern,neuroscience intern,ML intern,systems engineering intern",
+    "notes": "Defense/national security R&D. Neuroscience + AI group does BCI and human-machine teaming work. May require US citizenship. Highlight signal processing and systems thinking.",
+    "warmIntros": ""
+  }
+]
