@@ -1,20 +1,7 @@
 import { NextRequest } from "next/server";
 import { prisma } from "@/lib/db";
-import { anthropic } from "@/lib/anthropic";
+import { genAI } from "@/lib/gemini";
 import type { FitAnalysisResult, SkillEntry } from "@/types";
-
-function extractJson(text: string): string {
-  const codeBlock = text.match(/```(?:json)?\s*\n?([\s\S]*?)\n?\s*```/);
-  if (codeBlock) return codeBlock[1].trim();
-
-  const start = text.indexOf("{");
-  const end = text.lastIndexOf("}");
-  if (start !== -1 && end !== -1 && end > start) {
-    return text.slice(start, end + 1);
-  }
-
-  return text.trim();
-}
 
 function formatSkills(json: string): string {
   try {
@@ -38,6 +25,13 @@ export async function POST(request: NextRequest) {
       return Response.json(
         { error: "companyId and jdText are required." },
         { status: 400 }
+      );
+    }
+
+    if (!process.env.GEMINI_API_KEY) {
+      return Response.json(
+        { error: "GEMINI_API_KEY is not set. Add it to .env.local." },
+        { status: 500 }
       );
     }
 
@@ -76,9 +70,7 @@ Rules:
 - matchedRequirements: list specific JD requirements the candidate clearly meets, referencing their actual experience.
 - gaps: list specific JD requirements the candidate does NOT meet. Be concrete ("needs 2+ years of C++ — candidate shows only Python") not vague ("could improve technical skills").
 - recommendedActions: 2-4 specific things the candidate could do before applying to close gaps (a project, a course, a certification, reaching out to someone).
-- oneLineSummary: one sentence overall assessment.
-
-Return valid JSON only. No markdown, no commentary, no preamble.`;
+- oneLineSummary: one sentence overall assessment.`;
 
     const userMessage = `## CANDIDATE PROFILE
 
@@ -104,16 +96,19 @@ ${company.notes ? `Notes: ${company.notes}` : ""}
 ## JOB DESCRIPTION
 ${jdText}`;
 
-    const message = await anthropic.messages.create({
-      model: "claude-opus-4-5-20250514",
-      max_tokens: 1500,
-      temperature: 0.3,
-      system: systemPrompt,
-      messages: [{ role: "user", content: userMessage }],
+    const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
+
+    const response = await model.generateContent({
+      systemInstruction: systemPrompt,
+      contents: [{ role: "user", parts: [{ text: userMessage }] }],
+      generationConfig: {
+        temperature: 0.3,
+        maxOutputTokens: 1500,
+        responseMimeType: "application/json",
+      },
     });
 
-    const responseText =
-      message.content[0].type === "text" ? message.content[0].text : "";
+    const responseText = response.response.text();
 
     if (!responseText) {
       return Response.json(
@@ -122,17 +117,13 @@ ${jdText}`;
       );
     }
 
-    const jsonStr = extractJson(responseText);
     let result: FitAnalysisResult;
 
     try {
-      result = JSON.parse(jsonStr);
+      result = JSON.parse(responseText);
     } catch {
       return Response.json(
-        {
-          error: "Failed to parse AI response as JSON.",
-          raw: responseText,
-        },
+        { error: "Failed to parse AI response as JSON.", raw: responseText },
         { status: 502 }
       );
     }
@@ -146,10 +137,7 @@ ${jdText}`;
       typeof result.oneLineSummary !== "string"
     ) {
       return Response.json(
-        {
-          error: "AI response missing required fields.",
-          raw: responseText,
-        },
+        { error: "AI response missing required fields.", raw: responseText },
         { status: 502 }
       );
     }

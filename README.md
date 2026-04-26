@@ -9,7 +9,7 @@ This is **not** a generic job tracker — it's a targeting and timing tool for a
 ### Prerequisites
 
 - Node.js 20+
-- An [Anthropic API key](https://console.anthropic.com/) (for AI features)
+- A [Google Gemini API key](https://aistudio.google.com/apikey) (free — for AI features)
 
 ### Install & Run
 
@@ -22,8 +22,10 @@ npm install
 Create `.env.local` in the project root:
 
 ```
-ANTHROPIC_API_KEY=sk-ant-...
+GEMINI_API_KEY=your-key-here
 ```
+
+Get a free key at [Google AI Studio](https://aistudio.google.com/apikey) — no credit card required.
 
 Set up the database and seed it:
 
@@ -48,7 +50,7 @@ Open [http://localhost:3000](http://localhost:3000).
 | Framework | Next.js 16 (App Router) + TypeScript |
 | Styling | Tailwind CSS v4 |
 | Database | SQLite via Prisma ORM (file: `./data/app.db`) |
-| AI | Anthropic SDK (`claude-opus-4-5`) |
+| AI | Google Gemini 2.5 Flash (free tier) |
 | Auth | None (single-user, localhost) |
 
 ## Data Model
@@ -82,13 +84,13 @@ Compares your profile against a job description. Returns a structured analysis w
 
 Generates a 3-4 sentence "why me" paragraph connecting your background to a specific company. References your projects and avoids generic enthusiasm. Saved to the company record.
 
-Both endpoints use `claude-opus-4-5` via the Anthropic SDK. Set `ANTHROPIC_API_KEY` in `.env.local`.
+Both endpoints use Gemini 2.5 Flash via the Google Generative AI SDK (free tier). Set `GEMINI_API_KEY` in `.env.local`.
 
 ## Environment Variables
 
 | Variable | Required | Description |
 |----------|----------|-------------|
-| `ANTHROPIC_API_KEY` | For AI features | Anthropic API key |
+| `GEMINI_API_KEY` | For AI features | Free from [Google AI Studio](https://aistudio.google.com/apikey) |
 | `DATABASE_URL` | Auto-configured | SQLite path (set in `.env`) |
 
 ## Seed Data

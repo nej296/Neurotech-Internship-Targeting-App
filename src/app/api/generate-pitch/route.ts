@@ -1,6 +1,6 @@
 import { NextRequest } from "next/server";
 import { prisma } from "@/lib/db";
-import { anthropic } from "@/lib/anthropic";
+import { genAI } from "@/lib/gemini";
 import type { SkillEntry } from "@/types";
 
 function formatSkills(json: string): string {
@@ -21,6 +21,13 @@ export async function POST(request: NextRequest) {
       return Response.json(
         { error: "companyId is required." },
         { status: 400 }
+      );
+    }
+
+    if (!process.env.GEMINI_API_KEY) {
+      return Response.json(
+        { error: "GEMINI_API_KEY is not set. Add it to .env.local." },
+        { status: 500 }
       );
     }
 
@@ -96,16 +103,18 @@ Typical roles: ${company.rolesHiredBs}
 ${company.notes ? `Context: ${company.notes}` : ""}
 Career page: ${company.careerPageUrl}`;
 
-    const message = await anthropic.messages.create({
-      model: "claude-opus-4-5-20250514",
-      max_tokens: 400,
-      temperature: 0.5,
-      system: systemPrompt,
-      messages: [{ role: "user", content: userMessage }],
+    const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
+
+    const response = await model.generateContent({
+      systemInstruction: systemPrompt,
+      contents: [{ role: "user", parts: [{ text: userMessage }] }],
+      generationConfig: {
+        temperature: 0.5,
+        maxOutputTokens: 400,
+      },
     });
 
-    const responseText =
-      message.content[0].type === "text" ? message.content[0].text : "";
+    const responseText = response.response.text();
 
     if (!responseText) {
       return Response.json(
@@ -114,10 +123,13 @@ Career page: ${company.careerPageUrl}`;
       );
     }
 
-    // Strip any accidental preamble (e.g., "Here's..." or quotes)
+    // Strip any accidental preamble
     let whyMe = responseText.trim();
     whyMe = whyMe.replace(/^["']|["']$/g, "");
-    whyMe = whyMe.replace(/^Here(?:'s| is) (?:your |the |a )?(?:paragraph|pitch)[:\s]*/i, "");
+    whyMe = whyMe.replace(
+      /^Here(?:'s| is) (?:your |the |a )?(?:paragraph|pitch)[:\s]*/i,
+      ""
+    );
 
     // Save to company
     await prisma.company.update({
