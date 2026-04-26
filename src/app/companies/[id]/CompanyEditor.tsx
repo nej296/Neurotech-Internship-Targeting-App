@@ -9,6 +9,7 @@ import {
   deleteApplication,
 } from "../actions";
 import type { PrepChecklistItem, FitAnalysisResult } from "@/types";
+import GapAnalyzer from "@/components/GapAnalyzer";
 
 const LANES = [
   { value: "neurotech", label: "Neurotech" },
@@ -37,6 +38,7 @@ interface Application {
   id: string;
   roleTitle: string;
   roleUrl: string | null;
+  jdText: string | null;
   status: string;
   appliedAt: Date | null;
   fitAnalysisJson: string | null;
@@ -280,6 +282,161 @@ function WhyMeSection({
   );
 }
 
+function ApplicationCard({
+  app,
+  companyId,
+  onDelete,
+}: {
+  app: Application;
+  companyId: string;
+  onDelete: (id: string) => void;
+}) {
+  const [expanded, setExpanded] = useState(false);
+  const [jd, setJd] = useState(app.jdText ?? "");
+  const [analyzing, setAnalyzing] = useState(false);
+  const [fitData, setFitData] = useState<FitAnalysisResult | null>(() => {
+    try {
+      return app.fitAnalysisJson ? JSON.parse(app.fitAnalysisJson) : null;
+    } catch {
+      return null;
+    }
+  });
+  const [error, setError] = useState("");
+
+  async function handleAnalyze() {
+    if (!jd.trim()) {
+      setError("Paste a job description first.");
+      return;
+    }
+    setAnalyzing(true);
+    setError("");
+    try {
+      const res = await fetch("/api/analyze-fit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          companyId,
+          applicationId: app.id,
+          jdText: jd,
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error ?? `HTTP ${res.status}`);
+      setFitData(data);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : String(e));
+    } finally {
+      setAnalyzing(false);
+    }
+  }
+
+  const statusBg =
+    app.status === "offer"
+      ? "#dcfce7"
+      : app.status === "rejected" || app.status === "ghosted"
+      ? "#fee2e2"
+      : app.status === "interview"
+      ? "#dbeafe"
+      : "#f3f4f6";
+  const statusColor =
+    app.status === "offer"
+      ? "#166534"
+      : app.status === "rejected" || app.status === "ghosted"
+      ? "#991b1b"
+      : app.status === "interview"
+      ? "#1e40af"
+      : "#374151";
+
+  return (
+    <div className="border border-border rounded overflow-hidden">
+      {/* Summary row */}
+      <div
+        className="flex items-center gap-3 px-3 py-2.5 hover:bg-surface transition-colors cursor-pointer group"
+        onClick={() => setExpanded((v) => !v)}
+      >
+        <span
+          className="text-xs px-2 py-0.5 rounded font-medium shrink-0"
+          style={{ background: statusBg, color: statusColor }}
+        >
+          {STATUS_LABELS[app.status] ?? app.status}
+        </span>
+
+        <span className="flex-1 text-sm font-medium truncate">
+          {app.roleTitle}
+        </span>
+
+        {fitData && (
+          <span className="text-xs font-semibold tabular-nums text-muted shrink-0">
+            {fitData.fitScore}/100
+          </span>
+        )}
+
+        {app.appliedAt && (
+          <span className="text-xs text-muted tabular-nums shrink-0">
+            {new Date(app.appliedAt).toLocaleDateString()}
+          </span>
+        )}
+
+        <span className="text-xs text-muted shrink-0">
+          {expanded ? "▲" : "▼"}
+        </span>
+
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            onDelete(app.id);
+          }}
+          className="opacity-0 group-hover:opacity-100 text-xs text-muted hover:text-red-500 transition-opacity shrink-0"
+        >
+          ×
+        </button>
+      </div>
+
+      {/* Expanded: JD + Analyze Fit */}
+      {expanded && (
+        <div className="border-t border-border px-4 py-4 bg-surface space-y-4">
+          <div>
+            <div className="flex items-center justify-between mb-2">
+              <label className="text-xs font-medium uppercase tracking-wide text-muted">
+                Job Description
+              </label>
+              <button
+                onClick={handleAnalyze}
+                disabled={analyzing || !jd.trim()}
+                className="text-xs px-3 py-1.5 bg-accent text-white rounded hover:bg-accent/80 disabled:opacity-50 transition-colors"
+              >
+                {analyzing ? "Analyzing…" : "Analyze Fit"}
+              </button>
+            </div>
+            <textarea
+              value={jd}
+              onChange={(e) => setJd(e.target.value)}
+              rows={8}
+              placeholder="Paste the full job description here, then click Analyze Fit."
+              className="w-full border border-border rounded px-3 py-2 text-sm font-mono focus:outline-none focus:border-accent resize-y bg-white"
+            />
+            {analyzing && (
+              <p className="text-xs text-muted italic mt-1">
+                Running analysis with Claude — this takes 10–15 seconds…
+              </p>
+            )}
+            {error && (
+              <p className="text-xs text-red-600 mt-1">{error}</p>
+            )}
+          </div>
+
+          {/* Fit analysis results */}
+          {fitData && (
+            <div className="border-t border-border pt-4">
+              <GapAnalyzer data={fitData} />
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
 function ApplicationsSection({
   companyId,
   applications,
@@ -351,64 +508,15 @@ function ApplicationsSection({
         <p className="text-xs text-muted italic">No applications yet.</p>
       )}
 
-      <div className="space-y-1">
-        {applications.map((app) => {
-          const fitData: FitAnalysisResult | null = app.fitAnalysisJson
-            ? JSON.parse(app.fitAnalysisJson)
-            : null;
-
-          return (
-            <div
-              key={app.id}
-              className="flex items-center gap-3 px-3 py-2 border border-border rounded group"
-            >
-              <span
-                className="text-xs px-2 py-0.5 rounded font-medium"
-                style={{
-                  background:
-                    app.status === "offer"
-                      ? "#dcfce7"
-                      : app.status === "rejected" || app.status === "ghosted"
-                      ? "#fee2e2"
-                      : app.status === "interview"
-                      ? "#dbeafe"
-                      : "#f3f4f6",
-                  color:
-                    app.status === "offer"
-                      ? "#166534"
-                      : app.status === "rejected" || app.status === "ghosted"
-                      ? "#991b1b"
-                      : app.status === "interview"
-                      ? "#1e40af"
-                      : "#374151",
-                }}
-              >
-                {STATUS_LABELS[app.status] ?? app.status}
-              </span>
-
-              <span className="flex-1 text-sm truncate">{app.roleTitle}</span>
-
-              {fitData && (
-                <span className="text-xs font-semibold tabular-nums text-muted">
-                  {fitData.fitScore}/100
-                </span>
-              )}
-
-              {app.appliedAt && (
-                <span className="text-xs text-muted tabular-nums">
-                  {new Date(app.appliedAt).toLocaleDateString()}
-                </span>
-              )}
-
-              <button
-                onClick={() => handleDelete(app.id)}
-                className="opacity-0 group-hover:opacity-100 text-xs text-muted hover:text-red-500 transition-opacity"
-              >
-                ×
-              </button>
-            </div>
-          );
-        })}
+      <div className="space-y-2">
+        {applications.map((app) => (
+          <ApplicationCard
+            key={app.id}
+            app={app}
+            companyId={companyId}
+            onDelete={handleDelete}
+          />
+        ))}
       </div>
     </div>
   );
