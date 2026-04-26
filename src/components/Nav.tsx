@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 const links = [
   { href: "/", label: "Dashboard" },
@@ -9,6 +12,13 @@ const links = [
 ];
 
 export default function Nav() {
+  const pathname = usePathname();
+
+  function isActive(href: string) {
+    if (href === "/") return pathname === "/";
+    return pathname.startsWith(href);
+  }
+
   return (
     <nav className="border-b border-border bg-white">
       <div className="mx-auto flex h-14 max-w-7xl items-center gap-8 px-6">
@@ -20,7 +30,11 @@ export default function Nav() {
             <Link
               key={link.href}
               href={link.href}
-              className="text-sm text-muted hover:text-foreground transition-colors"
+              className={`text-sm transition-colors ${
+                isActive(link.href)
+                  ? "text-foreground font-medium"
+                  : "text-muted hover:text-foreground"
+              }`}
             >
               {link.label}
             </Link>

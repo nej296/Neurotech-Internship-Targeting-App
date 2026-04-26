@@ -1,36 +1,96 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Neurotech Internship Targeting App
 
-## Getting Started
+A single-user web application for targeting, tracking, and converting internship applications at neurotech, computational biotech, defense research, and AI/ML companies.
 
-First, run the development server:
+This is **not** a generic job tracker — it's a targeting and timing tool for a curated set of high-value companies with AI-powered fit analysis and pitch generation.
+
+## Setup
+
+### Prerequisites
+
+- Node.js 20+
+- An [Anthropic API key](https://console.anthropic.com/) (for AI features)
+
+### Install & Run
+
+```bash
+git clone https://github.com/nej296/Neurotech-Internship-Targeting-App.git
+cd Neurotech-Internship-Targeting-App
+npm install
+```
+
+Create `.env.local` in the project root:
+
+```
+ANTHROPIC_API_KEY=sk-ant-...
+```
+
+Set up the database and seed it:
+
+```bash
+npx prisma generate
+npx prisma migrate dev
+npm run seed
+```
+
+Start the dev server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Tech Stack
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Layer | Tool |
+|-------|------|
+| Framework | Next.js 16 (App Router) + TypeScript |
+| Styling | Tailwind CSS v4 |
+| Database | SQLite via Prisma ORM (file: `./data/app.db`) |
+| AI | Anthropic SDK (`claude-opus-4-5`) |
+| Auth | None (single-user, localhost) |
 
-## Learn More
+## Data Model
 
-To learn more about Next.js, take a look at the following resources:
+**Company** — target companies with recruiting cycle windows, priority ranking, lane classification (neurotech/biotech/defense/ai_ml/academic_lab), prep checklists, warm intro notes, and AI-generated "why me" pitches.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+**Application** — individual role applications linked to companies. Tracks status (target → applied → screen → interview → offer/rejected/ghosted), job descriptions, and AI fit analysis results.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+**Project** — portfolio projects tagged with relevant company lanes. Used by the pitch generator to reference concrete work.
 
-## Deploy on Vercel
+**Profile** — singleton record with master resume text, rated skills, and education. Feeds both AI endpoints.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Pages
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+| Route | Purpose |
+|-------|---------|
+| `/` | Dashboard — This Week alerts, 6-month recruiting calendar, pipeline summary |
+| `/companies` | Filterable company list (by lane + priority) |
+| `/companies/[id]` | Company detail — inline editing, prep checklist, applications, fit analysis, pitch generation |
+| `/pipeline` | Kanban board — drag applications between status columns |
+| `/projects` | Portfolio project tracker with lane tagging |
+| `/profile` | Resume, skills, and education editor |
+
+## AI Endpoints
+
+### POST `/api/analyze-fit`
+
+Compares your profile against a job description. Returns a structured analysis with fit score (0-100), matched requirements, gaps, and recommended actions. Saved to the application record.
+
+### POST `/api/generate-pitch`
+
+Generates a 3-4 sentence "why me" paragraph connecting your background to a specific company. References your projects and avoids generic enthusiasm. Saved to the company record.
+
+Both endpoints use `claude-opus-4-5` via the Anthropic SDK. Set `ANTHROPIC_API_KEY` in `.env.local`.
+
+## Environment Variables
+
+| Variable | Required | Description |
+|----------|----------|-------------|
+| `ANTHROPIC_API_KEY` | For AI features | Anthropic API key |
+| `DATABASE_URL` | Auto-configured | SQLite path (set in `.env`) |
+
+## Seed Data
+
+`data/seed-companies.json` contains 15 pre-configured companies across 5 lanes. Edit this file and re-run `npm run seed` to update. The seed script uses upsert, so it's safe to re-run without duplicating data.
