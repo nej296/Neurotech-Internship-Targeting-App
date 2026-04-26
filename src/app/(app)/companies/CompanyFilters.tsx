@@ -33,31 +33,31 @@ export default function CompanyFilters() {
   );
 
   return (
-    <div className="flex items-center gap-2 flex-wrap">
-      <span className="text-xs text-muted font-medium uppercase tracking-wide mr-1">Lane</span>
+    <div className="flex flex-wrap items-center gap-2 rounded-2xl border border-white/10 bg-surface p-3 backdrop-blur-xl">
+      <span className="mr-1 text-xs font-medium uppercase tracking-[0.22em] text-muted">Lane</span>
       {LANES.map((l) => (
         <button
           key={l.value}
           onClick={() => update("lane", lane === l.value ? "" : l.value)}
-          className={`text-xs px-3 py-1.5 rounded border transition-colors ${
+          className={`rounded-full border px-3 py-1.5 text-xs transition-colors ${
             lane === l.value
-              ? "border-accent bg-accent text-white"
-              : "border-border text-muted hover:border-foreground hover:text-foreground"
+              ? "border-accent bg-accent text-slate-950"
+              : "border-white/10 text-muted hover:border-cyan-300/60 hover:text-foreground"
           }`}
         >
           {l.label}
         </button>
       ))}
 
-      <span className="text-xs text-muted font-medium uppercase tracking-wide ml-4 mr-1">P</span>
+      <span className="ml-4 mr-1 text-xs font-medium uppercase tracking-[0.22em] text-muted">P</span>
       {PRIORITIES.map((p) => (
         <button
           key={p}
           onClick={() => update("priority", priority === String(p) ? "" : String(p))}
-          className={`w-8 h-8 text-xs rounded border transition-colors ${
+          className={`h-8 w-8 rounded-full border text-xs transition-colors ${
             priority === String(p)
-              ? "border-accent bg-accent text-white font-semibold"
-              : "border-border text-muted hover:border-foreground hover:text-foreground"
+              ? "border-accent bg-accent font-semibold text-slate-950"
+              : "border-white/10 text-muted hover:border-cyan-300/60 hover:text-foreground"
           }`}
         >
           {p}

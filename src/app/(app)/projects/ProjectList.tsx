@@ -8,9 +8,9 @@ const STATUS_CONFIG: Record<
   ProjectStatus,
   { label: string; color: string; bg: string }
 > = {
-  idea: { label: "Idea", color: "#6b7280", bg: "#f3f4f6" },
-  in_progress: { label: "In Progress", color: "#1e40af", bg: "#dbeafe" },
-  shipped: { label: "Shipped", color: "#166534", bg: "#dcfce7" },
+  idea: { label: "Idea", color: "#cbd5e1", bg: "rgba(148,163,184,0.12)" },
+  in_progress: { label: "In Progress", color: "#67e8f9", bg: "rgba(34,211,238,0.14)" },
+  shipped: { label: "Shipped", color: "#86efac", bg: "rgba(52,211,153,0.14)" },
 };
 
 const LANE_OPTIONS = [
@@ -75,10 +75,10 @@ function ProjectRow({ project }: { project: Project }) {
   }
 
   return (
-    <div className="border-b border-border last:border-b-0">
+    <div className="border-b border-white/10 last:border-b-0">
       {/* Row summary */}
       <div
-        className="flex items-center gap-4 px-4 py-3 hover:bg-surface transition-colors cursor-pointer"
+        className="flex cursor-pointer items-center gap-4 px-4 py-3 transition-colors hover:bg-cyan-300/5"
         onClick={() => setExpanded((v) => !v)}
       >
         <button
@@ -93,14 +93,14 @@ function ProjectRow({ project }: { project: Project }) {
           {cfg.label}
         </button>
 
-        <span className="flex-1 text-sm font-medium truncate">{name}</span>
+        <span className="flex-1 truncate text-sm font-medium text-white">{name}</span>
 
         {relevantLanes.length > 0 && (
           <div className="flex gap-1 shrink-0">
             {relevantLanes.map((l) => (
               <span
                 key={l}
-                className="text-xs px-1.5 py-0.5 rounded bg-surface border border-border text-muted"
+                className="rounded-full border border-white/10 bg-white/[0.04] px-1.5 py-0.5 text-xs text-muted"
               >
                 {LANE_OPTIONS.find((o) => o.value === l)?.label ?? l}
               </span>
@@ -127,7 +127,7 @@ function ProjectRow({ project }: { project: Project }) {
 
       {/* Expanded editor */}
       {expanded && (
-        <div className="px-4 pb-4 pt-1 space-y-4 border-t border-border bg-surface">
+        <div className="space-y-4 border-t border-white/10 bg-black/20 px-4 pb-4 pt-4">
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="block text-xs text-muted mb-1 font-medium uppercase tracking-wide">
@@ -137,7 +137,7 @@ function ProjectRow({ project }: { project: Project }) {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 onBlur={(e) => handleBlur("name", e.target.value)}
-                className="w-full border border-border rounded px-2 py-1.5 text-sm focus:outline-none focus:border-accent bg-white"
+                className="w-full rounded border border-border px-2 py-1.5 text-sm focus:border-accent focus:outline-none"
               />
             </div>
             <div>
@@ -149,7 +149,7 @@ function ProjectRow({ project }: { project: Project }) {
                 onChange={(e) => setGithubUrl(e.target.value)}
                 onBlur={(e) => handleBlur("githubUrl", e.target.value)}
                 placeholder="https://github.com/…"
-                className="w-full border border-border rounded px-2 py-1.5 text-sm focus:outline-none focus:border-accent bg-white"
+                className="w-full rounded border border-border px-2 py-1.5 text-sm focus:border-accent focus:outline-none"
               />
             </div>
           </div>
@@ -163,7 +163,7 @@ function ProjectRow({ project }: { project: Project }) {
               onChange={(e) => setDescription(e.target.value)}
               onBlur={(e) => handleBlur("description", e.target.value)}
               rows={3}
-              className="w-full border border-border rounded px-2 py-1.5 text-sm focus:outline-none focus:border-accent resize-none bg-white"
+              className="w-full resize-none rounded border border-border px-2 py-1.5 text-sm focus:border-accent focus:outline-none"
             />
           </div>
 
@@ -178,8 +178,8 @@ function ProjectRow({ project }: { project: Project }) {
                   onClick={() => toggleLane(opt.value)}
                   className={`text-xs px-3 py-1 rounded border transition-colors ${
                     relevantLanes.includes(opt.value)
-                      ? "border-accent bg-accent text-white"
-                      : "border-border text-muted hover:border-foreground"
+                      ? "border-accent bg-accent text-slate-950"
+                      : "border-white/10 text-muted hover:border-cyan-300/60"
                   }`}
                 >
                   {opt.label}
@@ -192,7 +192,7 @@ function ProjectRow({ project }: { project: Project }) {
             <button
               onClick={handleDelete}
               disabled={deleting}
-              className="text-xs text-muted hover:text-red-600 transition-colors disabled:opacity-50"
+              className="text-xs text-muted transition-colors hover:text-red-300 disabled:opacity-50"
             >
               {deleting ? "Deleting…" : "Delete project"}
             </button>
@@ -206,14 +206,14 @@ function ProjectRow({ project }: { project: Project }) {
 export default function ProjectList({ projects }: { projects: Project[] }) {
   if (projects.length === 0) {
     return (
-      <p className="text-sm text-muted py-8 text-center">
+      <p className="rounded-[2rem] border border-white/10 bg-surface py-8 text-center text-sm text-muted">
         No projects yet. Add one above.
       </p>
     );
   }
 
   return (
-    <div className="border border-border rounded overflow-hidden">
+    <div className="overflow-hidden rounded-[2rem] border border-white/10 bg-surface shadow-2xl shadow-black/20 backdrop-blur-xl">
       {projects.map((p) => (
         <ProjectRow key={p.id} project={p} />
       ))}

@@ -22,9 +22,14 @@ export default async function ProjectsPage() {
 
   return (
     <div>
-      <div className="mb-6 flex items-start justify-between">
+      <div className="mb-6 flex items-start justify-between rounded-[2rem] border border-white/10 bg-surface p-6 shadow-2xl shadow-black/20 backdrop-blur-xl">
         <div>
-          <h1 className="text-2xl font-semibold tracking-tight">Projects</h1>
+          <p className="text-xs font-semibold uppercase tracking-[0.28em] text-cyan-200">
+            Proof Assets
+          </p>
+          <h1 className="mt-2 text-3xl font-semibold tracking-tight text-white">
+            Projects
+          </h1>
           <p className="mt-1 text-sm text-muted">
             {projects.length} total — {shipped} shipped, {inProgress} in progress
           </p>

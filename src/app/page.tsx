@@ -1,136 +1,115 @@
-import { prisma } from "@/lib/db";
+"use client";
+
+import React from "react";
+import { motion } from "framer-motion";
 import Link from "next/link";
-import WeeklyReview from "@/components/WeeklyReview";
-import CycleCalendar from "@/components/CycleCalendar";
+import { LampContainer } from "@/components/ui/lamp";
 
-export const dynamic = "force-dynamic";
+const features = [
+  {
+    title: "Cycle Calendar",
+    desc: "See when every target company opens recruiting. Never miss a window again.",
+  },
+  {
+    title: "AI Fit Analysis",
+    desc: "Paste a JD, get an honest score with specific gaps and actions to close them.",
+  },
+  {
+    title: "Pipeline Kanban",
+    desc: "Drag applications through stages. See what's stale, what needs follow-up.",
+  },
+  {
+    title: "Why Me Generator",
+    desc: "AI-written pitch paragraphs that reference your actual projects — no generic filler.",
+  },
+];
 
-const STATUS_ORDER = [
-  "target", "applied", "screen", "interview", "offer", "rejected", "ghosted",
-] as const;
-
-const STATUS_LABELS: Record<string, string> = {
-  target: "Target",
-  applied: "Applied",
-  screen: "Screen",
-  interview: "Interview",
-  offer: "Offer",
-  rejected: "Rejected",
-  ghosted: "Ghosted",
-};
-
-export default async function DashboardPage() {
-  const [companies, applications] = await Promise.all([
-    prisma.company.findMany({
-      orderBy: [{ priority: "asc" }, { name: "asc" }],
-    }),
-    prisma.application.findMany({
-      include: { company: { select: { id: true, name: true } } },
-      orderBy: { lastActivityAt: "desc" },
-    }),
-  ]);
-
-  // --- This Week calculations ---
-  const now = new Date();
-  const in7Days = new Date(now.getTime() + 7 * 86_400_000);
-  const currentMonth = now.getMonth() + 1; // 1-based
-  const nextMonth = currentMonth === 12 ? 1 : currentMonth + 1;
-
-  const openingSoon = companies.filter(
-    (c) =>
-      c.cycleOpensMonth === currentMonth || c.cycleOpensMonth === nextMonth
-  );
-
-  const followUpsDue = applications.filter(
-    (a) => a.followUpDueAt && new Date(a.followUpDueAt) <= in7Days
-  );
-
-  const staleApps = applications.filter((a) => {
-    if (["offer", "rejected", "ghosted"].includes(a.status)) return false;
-    const ms = now.getTime() - new Date(a.lastActivityAt).getTime();
-    return ms / 86_400_000 > 14;
-  });
-
-  // --- Pipeline summary ---
-  const statusCounts = applications.reduce<Record<string, number>>(
-    (acc, app) => {
-      acc[app.status] = (acc[app.status] ?? 0) + 1;
-      return acc;
-    },
-    {}
-  );
-
-  const activeCount = applications.filter(
-    (a) => !["rejected", "ghosted"].includes(a.status)
-  ).length;
-
+export default function LandingPage() {
   return (
-    <div className="space-y-12">
-      {/* This Week */}
-      <WeeklyReview
-        openingSoon={openingSoon}
-        followUpsDue={followUpsDue}
-        staleApps={staleApps}
-      />
-
-      {/* Cycle Calendar */}
-      <CycleCalendar companies={companies} />
-
-      {/* Pipeline Summary */}
-      <section>
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-semibold">Pipeline</h2>
-          <Link
-            href="/pipeline"
-            className="text-xs text-accent hover:underline"
-          >
-            Open kanban →
-          </Link>
-        </div>
-
-        {applications.length === 0 ? (
-          <p className="text-sm text-muted border border-border rounded px-4 py-6 text-center">
-            No applications yet.{" "}
-            <Link href="/companies" className="text-accent underline">
-              Add one from a company page.
+    <div className="bg-slate-950 min-h-screen">
+      {/* Hero with Lamp */}
+      <LampContainer>
+        <motion.div
+          initial={{ opacity: 0, y: 100 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3, duration: 0.8, ease: "easeInOut" }}
+          className="flex flex-col items-center"
+        >
+          <h1 className="mt-8 bg-gradient-to-br from-slate-200 to-slate-400 py-4 bg-clip-text text-center text-5xl font-semibold tracking-tight text-transparent md:text-7xl leading-tight">
+            Target. Track.
+            <br />
+            Convert.
+          </h1>
+          <p className="mt-4 max-w-xl text-center text-base text-slate-400 md:text-lg">
+            Stop sending generic applications into the void. A targeting and
+            timing tool built for neurotech, biotech, defense, and AI/ML
+            internships.
+          </p>
+          <div className="mt-8 flex gap-4">
+            <Link
+              href="/dashboard"
+              className="rounded-full bg-cyan-500 px-8 py-3 text-sm font-semibold text-slate-950 shadow-lg shadow-cyan-500/25 transition-all hover:bg-cyan-400 hover:shadow-cyan-400/30"
+            >
+              Enter App
             </Link>
-          </p>
-        ) : (
-          <div className="grid grid-cols-7 gap-2">
-            {STATUS_ORDER.map((status) => {
-              const count = statusCounts[status] ?? 0;
-              const isTerminal =
-                status === "rejected" || status === "ghosted";
-              return (
-                <Link
-                  key={status}
-                  href="/pipeline"
-                  className="border border-border rounded p-3 text-center hover:border-accent transition-colors group"
-                >
-                  <div
-                    className={`text-2xl font-semibold tabular-nums mb-1 ${
-                      count > 0 && !isTerminal
-                        ? "text-foreground"
-                        : "text-muted"
-                    }`}
-                  >
-                    {count}
-                  </div>
-                  <div className="text-xs text-muted group-hover:text-foreground transition-colors">
-                    {STATUS_LABELS[status]}
-                  </div>
-                </Link>
-              );
-            })}
+            <Link
+              href="/companies"
+              className="rounded-full border border-slate-700 px-8 py-3 text-sm font-medium text-slate-300 transition-all hover:border-slate-500 hover:text-white"
+            >
+              Browse Targets
+            </Link>
           </div>
-        )}
+        </motion.div>
+      </LampContainer>
 
-        {activeCount > 0 && (
-          <p className="mt-3 text-xs text-muted">
-            {activeCount} active application{activeCount !== 1 ? "s" : ""}
+      {/* Features */}
+      <div className="mx-auto max-w-5xl px-6 py-24">
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+        >
+          <h2 className="text-center text-sm font-semibold uppercase tracking-widest text-cyan-400">
+            What it does
+          </h2>
+          <p className="mt-2 text-center text-3xl font-semibold text-white">
+            Four problems, one focused tool
           </p>
-        )}
-      </section>
+        </motion.div>
+
+        <div className="mt-16 grid grid-cols-1 gap-6 md:grid-cols-2">
+          {features.map((f, i) => (
+            <motion.div
+              key={f.title}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.1, duration: 0.5 }}
+              className="rounded-xl border border-slate-800 bg-slate-900/50 p-6 backdrop-blur-sm"
+            >
+              <h3 className="text-lg font-semibold text-white">{f.title}</h3>
+              <p className="mt-2 text-sm leading-relaxed text-slate-400">
+                {f.desc}
+              </p>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+
+      {/* Bottom CTA */}
+      <div className="border-t border-slate-800 py-16 text-center">
+        <p className="text-sm text-slate-500">
+          Built for a computational neuroscience student at George Mason
+          University.
+        </p>
+        <Link
+          href="/dashboard"
+          className="mt-4 inline-block text-sm font-medium text-cyan-400 hover:text-cyan-300 transition-colors"
+        >
+          Open Dashboard →
+        </Link>
+      </div>
     </div>
   );
 }

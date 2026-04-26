@@ -2,9 +2,10 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { Activity } from "lucide-react";
 
 const links = [
-  { href: "/", label: "Dashboard" },
+  { href: "/dashboard", label: "Dashboard" },
   { href: "/companies", label: "Companies" },
   { href: "/pipeline", label: "Pipeline" },
   { href: "/projects", label: "Projects" },
@@ -20,20 +21,30 @@ export default function Nav() {
   }
 
   return (
-    <nav className="border-b border-border bg-white">
-      <div className="mx-auto flex h-14 max-w-7xl items-center gap-8 px-6">
-        <Link href="/" className="text-sm font-semibold tracking-tight">
-          Internship Tracker
+    <nav className="sticky top-0 z-50 border-b border-white/10 bg-background/75 backdrop-blur-xl">
+      <div className="mx-auto flex h-16 max-w-7xl items-center gap-8 px-6">
+        <Link href="/" className="group flex items-center gap-3">
+          <span className="flex h-9 w-9 items-center justify-center rounded-full border border-cyan-300/30 bg-cyan-300/10 text-cyan-200 shadow-orbital transition-colors group-hover:border-cyan-200/70">
+            <Activity size={17} />
+          </span>
+          <span>
+            <span className="block text-sm font-semibold tracking-tight text-white">
+              Neurotarget
+            </span>
+            <span className="block text-[10px] uppercase tracking-[0.28em] text-muted">
+              Internship Ops
+            </span>
+          </span>
         </Link>
-        <div className="flex gap-6">
+        <div className="ml-auto flex items-center gap-1 rounded-full border border-white/10 bg-white/[0.03] p-1">
           {links.map((link) => (
             <Link
               key={link.href}
               href={link.href}
-              className={`text-sm transition-colors ${
+              className={`rounded-full px-4 py-2 text-sm transition-colors ${
                 isActive(link.href)
-                  ? "text-foreground font-medium"
-                  : "text-muted hover:text-foreground"
+                  ? "bg-cyan-300 text-slate-950 shadow-[0_0_22px_rgba(34,211,238,0.25)] font-medium"
+                  : "text-muted hover:bg-white/[0.06] hover:text-foreground"
               }`}
             >
               {link.label}

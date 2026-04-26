@@ -34,11 +34,11 @@ function daysSince(date: Date) {
 function SectionHeader({ title, count }: { title: string; count: number }) {
   return (
     <div className="flex items-center gap-2 mb-2">
-      <h3 className="text-xs font-semibold uppercase tracking-wide text-muted">
+      <h3 className="text-xs font-semibold uppercase tracking-[0.22em] text-muted">
         {title}
       </h3>
       {count > 0 && (
-        <span className="text-xs font-semibold bg-foreground text-white px-1.5 py-0.5 rounded-full">
+        <span className="rounded-full bg-cyan-300 px-1.5 py-0.5 text-xs font-semibold text-slate-950">
           {count}
         </span>
       )}
@@ -56,9 +56,9 @@ export default function WeeklyReview({
 
   if (!hasAnything) {
     return (
-      <section>
-        <h2 className="text-lg font-semibold mb-3">This Week</h2>
-        <p className="text-sm text-muted border border-border rounded px-4 py-6 text-center">
+      <section className="rounded-[2rem] border border-white/10 bg-surface p-6 shadow-2xl shadow-black/20 backdrop-blur-xl">
+        <h2 className="mb-3 text-lg font-semibold text-white">This Week</h2>
+        <p className="rounded-2xl border border-white/10 bg-black/20 px-4 py-6 text-center text-sm text-muted">
           Nothing urgent — you&apos;re up to date.
         </p>
       </section>
@@ -66,11 +66,11 @@ export default function WeeklyReview({
   }
 
   return (
-    <section>
-      <h2 className="text-lg font-semibold mb-4">This Week</h2>
-      <div className="grid grid-cols-3 gap-4">
+    <section className="rounded-[2rem] border border-white/10 bg-surface p-6 shadow-2xl shadow-black/20 backdrop-blur-xl">
+      <h2 className="mb-4 text-lg font-semibold text-white">This Week</h2>
+      <div className="grid gap-4 lg:grid-cols-3">
         {/* Opening soon */}
-        <div className="border border-border rounded p-4">
+        <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
           <SectionHeader title="Cycles Opening" count={openingSoon.length} />
           {openingSoon.length === 0 ? (
             <p className="text-xs text-muted italic">None this month.</p>
@@ -82,10 +82,10 @@ export default function WeeklyReview({
                     href={`/companies/${c.id}`}
                     className="flex items-center gap-2 group"
                   >
-                    <span className="text-xs w-5 h-5 flex items-center justify-center rounded bg-foreground text-white font-semibold shrink-0">
+                    <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded bg-cyan-300 text-xs font-semibold text-slate-950">
                       {c.priority}
                     </span>
-                    <span className="text-sm group-hover:text-accent transition-colors truncate">
+                    <span className="truncate text-sm transition-colors group-hover:text-accent">
                       {c.name}
                     </span>
                     <span className="ml-auto text-xs text-muted shrink-0">
@@ -99,7 +99,7 @@ export default function WeeklyReview({
         </div>
 
         {/* Follow-ups due */}
-        <div className="border border-border rounded p-4">
+        <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
           <SectionHeader title="Follow-ups Due" count={followUpsDue.length} />
           {followUpsDue.length === 0 ? (
             <p className="text-xs text-muted italic">No follow-ups pending.</p>
@@ -120,7 +120,7 @@ export default function WeeklyReview({
                       </span>
                       <span
                         className={`text-xs ${
-                          overdue ? "text-red-600 font-medium" : "text-muted"
+                          overdue ? "text-red-300 font-medium" : "text-muted"
                         }`}
                       >
                         {a.roleTitle} ·{" "}
@@ -139,7 +139,7 @@ export default function WeeklyReview({
         </div>
 
         {/* Stale applications */}
-        <div className="border border-border rounded p-4">
+        <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
           <SectionHeader title="No Response 14d+" count={staleApps.length} />
           {staleApps.length === 0 ? (
             <p className="text-xs text-muted italic">All applications active.</p>
@@ -154,7 +154,7 @@ export default function WeeklyReview({
                     <span className="text-sm group-hover:text-accent transition-colors block truncate">
                       {a.company.name}
                     </span>
-                    <span className="text-xs text-amber-600">
+                    <span className="text-xs text-amber-300">
                       {a.roleTitle} · {daysSince(a.lastActivityAt)}d ago
                     </span>
                   </Link>

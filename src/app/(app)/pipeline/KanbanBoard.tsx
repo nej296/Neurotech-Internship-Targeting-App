@@ -47,26 +47,26 @@ function KanbanCard({
     <div
       draggable
       onDragStart={() => onDragStart(app.id)}
-      className="bg-white border border-border rounded p-3 cursor-grab active:cursor-grabbing select-none hover:border-accent/50 transition-colors"
+      className="cursor-grab select-none rounded-2xl border border-white/10 bg-black/25 p-3 transition-colors hover:border-cyan-300/60 hover:bg-cyan-300/5 active:cursor-grabbing"
     >
       <Link
         href={`/companies/${app.company.id}`}
         onClick={(e) => e.stopPropagation()}
-        className="block text-xs text-muted hover:text-accent mb-1 transition-colors"
+        className="mb-1 block text-xs text-muted transition-colors hover:text-accent"
       >
         {app.company.name}
       </Link>
-      <p className="text-sm font-medium leading-snug mb-2">{app.roleTitle}</p>
+      <p className="mb-2 text-sm font-medium leading-snug text-white">{app.roleTitle}</p>
       <div className="flex items-center justify-between gap-2">
         <span
           className={`text-xs tabular-nums ${
-            days > 14 ? "text-amber-600 font-medium" : "text-muted"
+            days > 14 ? "text-amber-300 font-medium" : "text-muted"
           }`}
         >
           {days === 0 ? "Today" : `${days}d ago`}
         </span>
         {overdue && (
-          <span className="text-xs text-red-600 font-medium">Follow-up due</span>
+          <span className="text-xs font-medium text-red-300">Follow-up due</span>
         )}
       </div>
     </div>
@@ -91,9 +91,9 @@ function KanbanColumn({
   onDragLeave: () => void;
 }) {
   return (
-    <div className="flex flex-col min-w-[200px] flex-1">
+    <div className="flex min-w-[200px] flex-1 flex-col">
       <div className="flex items-center justify-between mb-3 px-1">
-        <span className="text-xs font-semibold uppercase tracking-wide text-muted">
+        <span className="text-xs font-semibold uppercase tracking-[0.22em] text-muted">
           {column.label}
         </span>
         <span className="text-xs text-muted tabular-nums">{cards.length}</span>
@@ -108,10 +108,10 @@ function KanbanColumn({
           e.preventDefault();
           onDrop(column.status);
         }}
-        className={`flex-1 min-h-[200px] rounded border-2 transition-colors p-2 space-y-2 ${
+        className={`min-h-[200px] flex-1 space-y-2 rounded-2xl border-2 p-2 transition-colors ${
           isDragOver
             ? "border-accent bg-accent-light"
-            : "border-transparent bg-surface"
+            : "border-white/10 bg-surface"
         }`}
       >
         {cards.map((app) => (
@@ -162,7 +162,8 @@ export default function KanbanBoard({ applications }: KanbanBoardProps) {
   const byStatus = (status: string) => apps.filter((a) => a.status === status);
 
   return (
-    <div className="flex gap-4 overflow-x-auto pb-4">
+    <div className="rounded-[2rem] border border-white/10 bg-surface p-4 shadow-2xl shadow-black/20 backdrop-blur-xl">
+      <div className="flex gap-4 overflow-x-auto pb-4">
       {COLUMNS.map((col) => (
         <KanbanColumn
           key={col.status}
@@ -175,6 +176,7 @@ export default function KanbanBoard({ applications }: KanbanBoardProps) {
           onDragLeave={() => setDragOver(null)}
         />
       ))}
+      </div>
     </div>
   );
 }

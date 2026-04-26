@@ -6,11 +6,11 @@ const MONTH_SHORT = [
 ];
 
 const LANE_COLORS: Record<string, string> = {
-  neurotech: "#2563eb",
-  biotech:   "#16a34a",
-  defense:   "#d97706",
-  ai_ml:     "#7c3aed",
-  academic_lab: "#64748b",
+  neurotech: "#22d3ee",
+  biotech: "#34d399",
+  defense: "#f59e0b",
+  ai_ml: "#a78bfa",
+  academic_lab: "#94a3b8",
 };
 
 // Returns 0-based index into the 6-month window, or -1 if outside
@@ -76,10 +76,10 @@ export default function CycleCalendar({ companies }: CycleCalendarProps) {
   const colPct = 100 / MONTHS;
 
   return (
-    <section>
+    <section className="rounded-[2rem] border border-white/10 bg-surface p-6 shadow-2xl shadow-black/20 backdrop-blur-xl">
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-lg font-semibold">Recruiting Calendar</h2>
-        <div className="flex items-center gap-4 text-xs text-muted">
+        <h2 className="text-lg font-semibold text-white">Recruiting Calendar</h2>
+        <div className="hidden items-center gap-4 text-xs text-muted md:flex">
           {Object.entries(LANE_COLORS).map(([lane, color]) => (
             <span key={lane} className="flex items-center gap-1.5">
               <span
@@ -92,17 +92,17 @@ export default function CycleCalendar({ companies }: CycleCalendarProps) {
         </div>
       </div>
 
-      <div className="border border-border rounded overflow-hidden">
+      <div className="overflow-hidden rounded-2xl border border-white/10 bg-black/20">
         {/* Month headers */}
-        <div className="flex border-b border-border bg-surface">
-          <div className="w-40 shrink-0 px-3 py-2 text-xs text-muted font-medium border-r border-border">
+        <div className="flex border-b border-white/10 bg-white/[0.04]">
+          <div className="w-40 shrink-0 border-r border-white/10 px-3 py-2 text-xs font-medium text-muted">
             Company
           </div>
           <div className="flex-1 flex">
             {windowMonths.map(({ year, month }, i) => (
               <div
                 key={i}
-                className="flex-1 px-2 py-2 text-xs text-muted font-medium text-center border-r border-border last:border-r-0"
+                className="flex-1 border-r border-white/10 px-2 py-2 text-center text-xs font-medium text-muted last:border-r-0"
               >
                 {MONTH_SHORT[month]}
                 {month === 1 && (
@@ -131,10 +131,10 @@ export default function CycleCalendar({ companies }: CycleCalendarProps) {
           return (
             <div
               key={company.id}
-              className="flex border-b border-border last:border-b-0 hover:bg-surface/50 transition-colors"
+              className="flex border-b border-white/10 transition-colors last:border-b-0 hover:bg-cyan-300/5"
             >
               {/* Company name */}
-              <div className="w-40 shrink-0 px-3 py-2.5 border-r border-border flex items-center gap-2">
+              <div className="flex w-40 shrink-0 items-center gap-2 border-r border-white/10 px-3 py-2.5">
                 <span
                   className="w-4 h-4 flex items-center justify-center rounded text-[10px] font-bold text-white shrink-0"
                   style={{ background: color }}
@@ -143,7 +143,7 @@ export default function CycleCalendar({ companies }: CycleCalendarProps) {
                 </span>
                 <Link
                   href={`/companies/${company.id}`}
-                  className="text-xs font-medium truncate hover:text-accent transition-colors"
+                  className="truncate text-xs font-medium transition-colors hover:text-accent"
                 >
                   {company.name}
                 </Link>
@@ -154,12 +154,13 @@ export default function CycleCalendar({ companies }: CycleCalendarProps) {
                 {bar ? (
                   <Link
                     href={`/companies/${company.id}`}
-                    className="absolute top-2 bottom-2 rounded flex items-center px-2 transition-opacity hover:opacity-80"
+                    className="absolute bottom-2 top-2 flex items-center rounded-full px-2 transition-opacity hover:opacity-100"
                     style={{
                       left: `${bar.start * colPct}%`,
                       width: `${(bar.end - bar.start + 1) * colPct}%`,
                       background: color,
-                      opacity: 0.8,
+                      opacity: 0.78,
+                      boxShadow: `0 0 22px ${color}33`,
                     }}
                     title={`${company.name}: ${MONTH_SHORT[company.cycleOpensMonth!]}–${MONTH_SHORT[company.cycleClosesMonth!]}`}
                   >
@@ -181,7 +182,7 @@ export default function CycleCalendar({ companies }: CycleCalendarProps) {
 
         {/* Rolling companies footer */}
         {rolling.length > 0 && (
-          <div className="px-4 py-2.5 bg-surface/50 border-t border-border">
+          <div className="border-t border-white/10 bg-white/[0.04] px-4 py-2.5">
             <span className="text-xs text-muted">
               Rolling cycle:{" "}
               {rolling.map((c, i) => (

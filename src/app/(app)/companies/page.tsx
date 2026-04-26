@@ -24,9 +24,14 @@ export default async function CompaniesPage({ searchParams }: PageProps) {
   return (
     <div>
       {/* Header */}
-      <div className="flex items-start justify-between mb-6">
+      <div className="mb-6 flex items-start justify-between rounded-[2rem] border border-white/10 bg-surface p-6 shadow-2xl shadow-black/20 backdrop-blur-xl">
         <div>
-          <h1 className="text-2xl font-semibold tracking-tight">Companies</h1>
+          <p className="text-xs font-semibold uppercase tracking-[0.28em] text-cyan-200">
+            Target Database
+          </p>
+          <h1 className="mt-2 text-3xl font-semibold tracking-tight text-white">
+            Companies
+          </h1>
           <p className="mt-1 text-sm text-muted">
             {companies.length} target{companies.length !== 1 ? "s" : ""}
             {lane || priority ? " (filtered)" : ""}
@@ -43,8 +48,8 @@ export default async function CompaniesPage({ searchParams }: PageProps) {
       </div>
 
       {/* Table header */}
-      <div className="border border-border rounded overflow-hidden">
-        <div className="flex items-center gap-4 px-4 py-2 bg-surface border-b border-border text-xs text-muted uppercase tracking-wide font-medium">
+      <div className="overflow-hidden rounded-[2rem] border border-white/10 bg-surface shadow-2xl shadow-black/20 backdrop-blur-xl">
+        <div className="flex items-center gap-4 border-b border-white/10 bg-white/[0.04] px-4 py-3 text-xs font-medium uppercase tracking-[0.22em] text-muted">
           <span className="w-6 shrink-0">P</span>
           <span className="flex-1">Name</span>
           <span className="shrink-0 w-28 text-right">Lane</span>

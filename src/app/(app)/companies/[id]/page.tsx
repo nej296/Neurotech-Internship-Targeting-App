@@ -26,7 +26,7 @@ export default async function CompanyDetailPage({ params }: PageProps) {
       <div className="mb-6">
         <Link
           href="/companies"
-          className="text-xs text-muted hover:text-foreground transition-colors"
+          className="text-xs text-muted transition-colors hover:text-foreground"
         >
           ← Companies
         </Link>

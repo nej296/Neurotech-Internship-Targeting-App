@@ -15,7 +15,7 @@ export async function moveApplication(id: string, status: ApplicationStatus) {
       },
     });
     revalidatePath("/pipeline");
-    revalidatePath("/");
+    revalidatePath("/dashboard");
     return { success: true };
   } catch (e) {
     return { success: false, error: String(e) };

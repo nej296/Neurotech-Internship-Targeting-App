@@ -48,26 +48,31 @@ export default function CompanyCard({
   return (
     <Link
       href={`/companies/${id}`}
-      className="flex items-center gap-4 px-4 py-3 border-b border-border hover:bg-surface transition-colors group"
+      className="group flex items-center gap-4 border-b border-white/10 px-4 py-3 transition-colors hover:bg-cyan-300/5"
     >
       {/* Priority */}
       <span
         className="w-6 h-6 flex items-center justify-center rounded text-xs font-semibold shrink-0"
         style={{
-          background: priority === 1 ? "#0a0a0a" : priority === 2 ? "#374151" : "#9ca3af",
-          color: "#fff",
+          background:
+            priority === 1
+              ? "#22d3ee"
+              : priority === 2
+                ? "#34d399"
+                : "#475569",
+          color: priority <= 2 ? "#031016" : "#fff",
         }}
       >
         {priority}
       </span>
 
       {/* Name */}
-      <span className="flex-1 text-sm font-medium group-hover:text-accent transition-colors truncate">
+      <span className="flex-1 truncate text-sm font-medium text-white transition-colors group-hover:text-accent">
         {name}
       </span>
 
       {/* Lane badge */}
-      <span className="shrink-0 text-xs px-2 py-0.5 rounded bg-surface border border-border text-muted font-medium uppercase tracking-wide">
+      <span className="shrink-0 rounded-full border border-white/10 bg-white/[0.04] px-2 py-0.5 text-xs font-medium uppercase tracking-wide text-muted">
         {LANE_LABELS[lane] ?? lane}
       </span>
 

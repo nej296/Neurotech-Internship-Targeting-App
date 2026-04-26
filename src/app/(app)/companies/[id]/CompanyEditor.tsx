@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useRef } from "react";
+import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import {
   updateCompanyField,
@@ -90,7 +90,7 @@ function InlineField({
   }
 
   const inputClass =
-    "w-full border border-transparent rounded px-2 py-1 text-sm focus:outline-none focus:border-accent hover:border-border transition-colors bg-transparent";
+    "w-full rounded border border-transparent bg-transparent px-2 py-1 text-sm transition-colors hover:border-border focus:border-accent focus:outline-none";
 
   return (
     <div>
@@ -188,7 +188,7 @@ function PrepChecklist({
             </span>
             <button
               onClick={() => removeItem(idx)}
-              className="opacity-0 group-hover:opacity-100 text-xs text-muted hover:text-red-500 transition-opacity"
+              className="text-xs text-muted opacity-0 transition-opacity hover:text-red-300 group-hover:opacity-100"
             >
               ×
             </button>
@@ -202,11 +202,11 @@ function PrepChecklist({
           onChange={(e) => setNewItem(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && addItem()}
           placeholder="Add item…"
-          className="flex-1 border border-border rounded px-2 py-1 text-xs focus:outline-none focus:border-accent"
+          className="flex-1 rounded border border-border px-2 py-1 text-xs focus:border-accent focus:outline-none"
         />
         <button
           onClick={addItem}
-          className="text-xs px-3 py-1 border border-border rounded hover:border-foreground transition-colors"
+          className="rounded-full border border-white/10 px-3 py-1 text-xs transition-colors hover:border-cyan-300/60"
         >
           Add
         </button>
@@ -257,7 +257,7 @@ function WhyMeSection({
         <button
           onClick={generate}
           disabled={loading}
-          className="text-xs px-3 py-1 bg-accent text-white rounded hover:bg-accent/80 disabled:opacity-50 transition-colors"
+          className="rounded-full bg-accent px-3 py-1 text-xs font-semibold text-slate-950 transition-colors hover:bg-cyan-200 disabled:opacity-50"
         >
           {loading ? "Generating…" : "Generate"}
         </button>
@@ -267,7 +267,7 @@ function WhyMeSection({
           Calling Claude, this may take 10–15s…
         </p>
       )}
-      {error && <p className="text-xs text-red-600 mb-2">{error}</p>}
+      {error && <p className="mb-2 text-xs text-red-300">{error}</p>}
       <textarea
         value={text}
         onChange={(e) => setText(e.target.value)}
@@ -276,7 +276,7 @@ function WhyMeSection({
         }}
         rows={5}
         placeholder="Click Generate to create a targeted pitch, or write your own."
-        className="w-full border border-border rounded px-2 py-1.5 text-sm focus:outline-none focus:border-accent resize-none"
+        className="w-full resize-none rounded border border-border px-2 py-1.5 text-sm focus:border-accent focus:outline-none"
       />
     </div>
   );
@@ -348,10 +348,10 @@ function ApplicationCard({
       : "#374151";
 
   return (
-    <div className="border border-border rounded overflow-hidden">
+    <div className="overflow-hidden rounded-2xl border border-white/10 bg-black/20">
       {/* Summary row */}
       <div
-        className="flex items-center gap-3 px-3 py-2.5 hover:bg-surface transition-colors cursor-pointer group"
+        className="group flex cursor-pointer items-center gap-3 px-3 py-2.5 transition-colors hover:bg-cyan-300/5"
         onClick={() => setExpanded((v) => !v)}
       >
         <span
@@ -361,7 +361,7 @@ function ApplicationCard({
           {STATUS_LABELS[app.status] ?? app.status}
         </span>
 
-        <span className="flex-1 text-sm font-medium truncate">
+        <span className="flex-1 truncate text-sm font-medium text-white">
           {app.roleTitle}
         </span>
 
@@ -386,7 +386,7 @@ function ApplicationCard({
             e.stopPropagation();
             onDelete(app.id);
           }}
-          className="opacity-0 group-hover:opacity-100 text-xs text-muted hover:text-red-500 transition-opacity shrink-0"
+          className="shrink-0 text-xs text-muted opacity-0 transition-opacity hover:text-red-300 group-hover:opacity-100"
         >
           ×
         </button>
@@ -394,7 +394,7 @@ function ApplicationCard({
 
       {/* Expanded: JD + Analyze Fit */}
       {expanded && (
-        <div className="border-t border-border px-4 py-4 bg-surface space-y-4">
+        <div className="space-y-4 border-t border-white/10 bg-black/20 px-4 py-4">
           <div>
             <div className="flex items-center justify-between mb-2">
               <label className="text-xs font-medium uppercase tracking-wide text-muted">
@@ -403,7 +403,7 @@ function ApplicationCard({
               <button
                 onClick={handleAnalyze}
                 disabled={analyzing || !jd.trim()}
-                className="text-xs px-3 py-1.5 bg-accent text-white rounded hover:bg-accent/80 disabled:opacity-50 transition-colors"
+                className="rounded-full bg-accent px-3 py-1.5 text-xs font-semibold text-slate-950 transition-colors hover:bg-cyan-200 disabled:opacity-50"
               >
                 {analyzing ? "Analyzing…" : "Analyze Fit"}
               </button>
@@ -413,7 +413,7 @@ function ApplicationCard({
               onChange={(e) => setJd(e.target.value)}
               rows={8}
               placeholder="Paste the full job description here, then click Analyze Fit."
-              className="w-full border border-border rounded px-3 py-2 text-sm font-mono focus:outline-none focus:border-accent resize-y bg-white"
+              className="w-full resize-y rounded border border-border px-3 py-2 font-mono text-sm focus:border-accent focus:outline-none"
             />
             {analyzing && (
               <p className="text-xs text-muted italic mt-1">
@@ -421,13 +421,13 @@ function ApplicationCard({
               </p>
             )}
             {error && (
-              <p className="text-xs text-red-600 mt-1">{error}</p>
+              <p className="mt-1 text-xs text-red-300">{error}</p>
             )}
           </div>
 
           {/* Fit analysis results */}
           {fitData && (
-            <div className="border-t border-border pt-4">
+            <div className="border-t border-white/10 pt-4">
               <GapAnalyzer data={fitData} />
             </div>
           )}
@@ -472,31 +472,31 @@ function ApplicationsSection({
         </label>
         <button
           onClick={() => setAdding((v) => !v)}
-          className="text-xs px-3 py-1 border border-border rounded hover:border-foreground transition-colors"
+          className="rounded-full border border-white/10 px-3 py-1 text-xs transition-colors hover:border-cyan-300/60"
         >
           {adding ? "Cancel" : "+ Add"}
         </button>
       </div>
 
       {adding && (
-        <div className="border border-border rounded p-3 mb-3 space-y-2">
+        <div className="mb-3 space-y-2 rounded-2xl border border-white/10 bg-black/20 p-3">
           <input
             value={role}
             onChange={(e) => setRole(e.target.value)}
             placeholder="Role title *"
-            className="w-full border border-border rounded px-2 py-1 text-sm focus:outline-none focus:border-accent"
+            className="w-full rounded border border-border px-2 py-1 text-sm focus:border-accent focus:outline-none"
           />
           <input
             value={url}
             onChange={(e) => setUrl(e.target.value)}
             placeholder="Job posting URL (optional)"
-            className="w-full border border-border rounded px-2 py-1 text-sm focus:outline-none focus:border-accent"
+            className="w-full rounded border border-border px-2 py-1 text-sm focus:border-accent focus:outline-none"
           />
           <div className="flex justify-end">
             <button
               onClick={handleAdd}
               disabled={saving || !role.trim()}
-              className="text-xs px-3 py-1 bg-foreground text-white rounded hover:bg-foreground/80 disabled:opacity-50 transition-colors"
+              className="rounded-full bg-cyan-300 px-3 py-1 text-xs font-semibold text-slate-950 transition-colors hover:bg-cyan-200 disabled:opacity-50"
             >
               {saving ? "Adding…" : "Add Application"}
             </button>
@@ -534,31 +534,31 @@ export default function CompanyEditor({ company }: CompanyEditorProps) {
   }
 
   return (
-    <div>
+    <div className="rounded-[2rem] border border-white/10 bg-surface p-6 shadow-2xl shadow-black/20 backdrop-blur-xl">
       {/* Header */}
-      <div className="flex items-start justify-between mb-8">
+      <div className="mb-8 flex items-start justify-between">
         <div className="flex-1 min-w-0">
           <input
             defaultValue={company.name}
             onBlur={async (e) => {
               await updateCompanyField(company.id, "name", e.target.value);
             }}
-            className="text-2xl font-semibold tracking-tight w-full border border-transparent rounded px-1 -ml-1 focus:outline-none focus:border-accent hover:border-border transition-colors bg-transparent"
+            className="-ml-1 w-full rounded border border-transparent bg-transparent px-1 text-3xl font-semibold tracking-tight text-white transition-colors hover:border-border focus:border-accent focus:outline-none"
           />
         </div>
         <button
           onClick={handleDelete}
           disabled={deleting}
-          className="ml-4 text-xs text-muted hover:text-red-600 transition-colors disabled:opacity-50 shrink-0"
+          className="ml-4 shrink-0 text-xs text-muted transition-colors hover:text-red-300 disabled:opacity-50"
         >
           {deleting ? "Deleting…" : "Delete"}
         </button>
       </div>
 
       {/* Two-column layout */}
-      <div className="grid grid-cols-3 gap-8">
+      <div className="grid gap-8 lg:grid-cols-3">
         {/* Left: main fields */}
-        <div className="col-span-2 space-y-5">
+        <div className="space-y-5 lg:col-span-2">
           <div className="grid grid-cols-2 gap-5">
             {/* Lane */}
             <div>
@@ -570,7 +570,7 @@ export default function CompanyEditor({ company }: CompanyEditorProps) {
                 onChange={async (e) => {
                   await updateCompanyField(company.id, "lane", e.target.value);
                 }}
-                className="w-full border border-border rounded px-2 py-1.5 text-sm focus:outline-none focus:border-accent bg-white"
+                className="w-full rounded border border-border px-2 py-1.5 text-sm focus:border-accent focus:outline-none"
               >
                 {LANES.map((l) => (
                   <option key={l.value} value={l.value}>
@@ -594,7 +594,7 @@ export default function CompanyEditor({ company }: CompanyEditorProps) {
                     parseInt(e.target.value, 10)
                   );
                 }}
-                className="w-full border border-border rounded px-2 py-1.5 text-sm focus:outline-none focus:border-accent bg-white"
+                className="w-full rounded border border-border px-2 py-1.5 text-sm focus:border-accent focus:outline-none"
               >
                 {[1, 2, 3, 4, 5].map((p) => (
                   <option key={p} value={p}>
@@ -618,7 +618,7 @@ export default function CompanyEditor({ company }: CompanyEditorProps) {
                     e.target.value ? parseInt(e.target.value, 10) : null
                   );
                 }}
-                className="w-full border border-border rounded px-2 py-1.5 text-sm focus:outline-none focus:border-accent bg-white"
+                className="w-full rounded border border-border px-2 py-1.5 text-sm focus:border-accent focus:outline-none"
               >
                 <option value="">Rolling</option>
                 {MONTH_NAMES.slice(1).map((m, i) => (
@@ -643,7 +643,7 @@ export default function CompanyEditor({ company }: CompanyEditorProps) {
                     e.target.value ? parseInt(e.target.value, 10) : null
                   );
                 }}
-                className="w-full border border-border rounded px-2 py-1.5 text-sm focus:outline-none focus:border-accent bg-white"
+                className="w-full rounded border border-border px-2 py-1.5 text-sm focus:border-accent focus:outline-none"
               >
                 <option value="">Rolling</option>
                 {MONTH_NAMES.slice(1).map((m, i) => (
@@ -682,7 +682,7 @@ export default function CompanyEditor({ company }: CompanyEditorProps) {
 
           <WhyMeSection companyId={company.id} initial={company.whyMe} />
 
-          <div className="border-t border-border pt-5">
+          <div className="border-t border-white/10 pt-5">
             <ApplicationsSection
               companyId={company.id}
               applications={company.applications}
@@ -706,7 +706,7 @@ export default function CompanyEditor({ company }: CompanyEditorProps) {
             initialJson={company.prepChecklistJson}
           />
 
-          <div className="border-t border-border pt-4">
+          <div className="border-t border-white/10 pt-4">
             <a
               href={company.careerPageUrl}
               target="_blank"

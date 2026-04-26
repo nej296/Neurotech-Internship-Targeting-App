@@ -26,7 +26,7 @@ export default function NewProjectForm() {
     return (
       <button
         onClick={() => setOpen(true)}
-        className="text-sm px-4 py-2 bg-foreground text-white rounded hover:bg-foreground/80 transition-colors"
+        className="rounded-full bg-cyan-300 px-4 py-2 text-sm font-semibold text-slate-950 shadow-orbital transition-colors hover:bg-cyan-200"
       >
         + Add Project
       </button>
@@ -34,7 +34,7 @@ export default function NewProjectForm() {
   }
 
   return (
-    <div className="border border-border rounded bg-surface p-5 mt-4">
+    <div className="mt-4 rounded-2xl border border-white/10 bg-black/20 p-5">
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-sm font-semibold">New Project</h3>
         <button
@@ -51,7 +51,7 @@ export default function NewProjectForm() {
             <input
               name="name"
               required
-              className="w-full border border-border rounded px-3 py-1.5 text-sm focus:outline-none focus:border-accent"
+              className="w-full rounded border border-border px-3 py-1.5 text-sm focus:border-accent focus:outline-none"
               placeholder="Neural decoder for EEG"
             />
           </div>
@@ -60,7 +60,7 @@ export default function NewProjectForm() {
             <select
               name="status"
               defaultValue="idea"
-              className="w-full border border-border rounded px-3 py-1.5 text-sm focus:outline-none focus:border-accent bg-white"
+              className="w-full rounded border border-border px-3 py-1.5 text-sm focus:border-accent focus:outline-none"
             >
               <option value="idea">Idea</option>
               <option value="in_progress">In Progress</option>
@@ -76,7 +76,7 @@ export default function NewProjectForm() {
             name="description"
             required
             rows={2}
-            className="w-full border border-border rounded px-3 py-1.5 text-sm focus:outline-none focus:border-accent resize-none"
+            className="w-full resize-none rounded border border-border px-3 py-1.5 text-sm focus:border-accent focus:outline-none"
             placeholder="What it does, what stack it uses, what it demonstrates…"
           />
         </div>
@@ -85,7 +85,7 @@ export default function NewProjectForm() {
           <input
             name="githubUrl"
             type="url"
-            className="w-full border border-border rounded px-3 py-1.5 text-sm focus:outline-none focus:border-accent"
+            className="w-full rounded border border-border px-3 py-1.5 text-sm focus:border-accent focus:outline-none"
             placeholder="https://github.com/…"
           />
         </div>
@@ -94,7 +94,7 @@ export default function NewProjectForm() {
           <button
             type="submit"
             disabled={saving}
-            className="text-sm px-4 py-2 bg-foreground text-white rounded hover:bg-foreground/80 disabled:opacity-50 transition-colors"
+            className="rounded-full bg-cyan-300 px-4 py-2 text-sm font-semibold text-slate-950 transition-colors hover:bg-cyan-200 disabled:opacity-50"
           >
             {saving ? "Creating…" : "Create Project"}
           </button>

@@ -39,7 +39,7 @@ function SaveField({
           {label}
         </label>
         {saving && <span className="text-xs text-accent">Saving…</span>}
-        {saved && !saving && <span className="text-xs text-green-600">Saved</span>}
+        {saved && !saving && <span className="text-xs text-emerald-300">Saved</span>}
       </div>
       <textarea
         value={value}
@@ -47,7 +47,7 @@ function SaveField({
         onBlur={handleBlur}
         rows={rows}
         placeholder={placeholder}
-        className="w-full border border-border rounded px-3 py-2 text-sm font-mono focus:outline-none focus:border-accent resize-y"
+        className="w-full resize-y rounded-2xl border border-border px-3 py-2 font-mono text-sm focus:border-accent focus:outline-none"
       />
     </div>
   );
@@ -99,7 +99,7 @@ function SkillsEditor({ initialJson }: { initialJson: string }) {
         {saving && <span className="text-xs text-accent">Saving…</span>}
       </div>
 
-      <div className="border border-border rounded overflow-hidden mb-3">
+      <div className="mb-3 overflow-hidden rounded-2xl border border-white/10 bg-black/20">
         {skills.length === 0 ? (
           <p className="px-4 py-6 text-center text-xs text-muted italic">
             No skills added yet.
@@ -108,9 +108,9 @@ function SkillsEditor({ initialJson }: { initialJson: string }) {
           skills.map((s, idx) => (
             <div
               key={idx}
-              className="flex items-center gap-4 px-4 py-2.5 border-b border-border last:border-b-0 group"
+              className="group flex items-center gap-4 border-b border-white/10 px-4 py-2.5 last:border-b-0"
             >
-              <span className="flex-1 text-sm">{s.skill}</span>
+              <span className="flex-1 text-sm text-white">{s.skill}</span>
 
               {/* Level pips */}
               <div className="flex items-center gap-1">
@@ -122,7 +122,7 @@ function SkillsEditor({ initialJson }: { initialJson: string }) {
                     className={`w-4 h-4 rounded-sm transition-colors ${
                       l <= s.level
                         ? "bg-accent"
-                        : "bg-border hover:bg-muted/40"
+                        : "bg-white/10 hover:bg-muted/40"
                     }`}
                   />
                 ))}
@@ -133,7 +133,7 @@ function SkillsEditor({ initialJson }: { initialJson: string }) {
 
               <button
                 onClick={() => removeSkill(idx)}
-                className="opacity-0 group-hover:opacity-100 text-xs text-muted hover:text-red-500 transition-opacity"
+                className="text-xs text-muted opacity-0 transition-opacity hover:text-red-300 group-hover:opacity-100"
               >
                 ×
               </button>
@@ -148,12 +148,12 @@ function SkillsEditor({ initialJson }: { initialJson: string }) {
           onChange={(e) => setNewSkill(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && addSkill()}
           placeholder="Add skill (e.g. PyTorch, spike sorting, MEA analysis)…"
-          className="flex-1 border border-border rounded px-3 py-1.5 text-sm focus:outline-none focus:border-accent"
+          className="flex-1 rounded border border-border px-3 py-1.5 text-sm focus:border-accent focus:outline-none"
         />
         <button
           onClick={addSkill}
           disabled={!newSkill.trim()}
-          className="text-sm px-4 py-1.5 border border-border rounded hover:border-foreground disabled:opacity-40 transition-colors"
+          className="rounded-full border border-white/10 px-4 py-1.5 text-sm transition-colors hover:border-cyan-300/60 disabled:opacity-40"
         >
           Add
         </button>
@@ -172,7 +172,7 @@ interface ProfileEditorProps {
 
 export default function ProfileEditor({ profile }: ProfileEditorProps) {
   return (
-    <div className="space-y-8 max-w-3xl">
+    <div className="max-w-3xl space-y-8 rounded-[2rem] border border-white/10 bg-surface p-6 shadow-2xl shadow-black/20 backdrop-blur-xl">
       <SkillsEditor initialJson={profile.skillsJson} />
 
       <div className="border-t border-border pt-8">

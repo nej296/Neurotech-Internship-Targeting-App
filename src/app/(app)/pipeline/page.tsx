@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/db";
+import Link from "next/link";
 import KanbanBoard from "./KanbanBoard";
 
 export const dynamic = "force-dynamic";
@@ -18,9 +19,14 @@ export default async function PipelinePage() {
 
   return (
     <div>
-      <div className="mb-6 flex items-end justify-between">
+      <div className="mb-6 flex items-end justify-between rounded-[2rem] border border-white/10 bg-surface p-6 shadow-2xl shadow-black/20 backdrop-blur-xl">
         <div>
-          <h1 className="text-2xl font-semibold tracking-tight">Pipeline</h1>
+          <p className="text-xs font-semibold uppercase tracking-[0.28em] text-cyan-200">
+            Application Flow
+          </p>
+          <h1 className="mt-2 text-3xl font-semibold tracking-tight text-white">
+            Pipeline
+          </h1>
           <p className="mt-1 text-sm text-muted">
             {total} application{total !== 1 ? "s" : ""} — {active} active
           </p>
@@ -31,13 +37,13 @@ export default async function PipelinePage() {
       </div>
 
       {total === 0 ? (
-        <div className="border border-border rounded p-12 text-center">
+        <div className="rounded-[2rem] border border-white/10 bg-surface p-12 text-center shadow-2xl shadow-black/20 backdrop-blur-xl">
           <p className="text-sm text-muted">No applications yet.</p>
           <p className="text-xs text-muted mt-1">
             Add applications from a{" "}
-            <a href="/companies" className="text-accent underline">
+            <Link href="/companies" className="text-accent underline">
               company detail page
-            </a>
+            </Link>
             .
           </p>
         </div>
